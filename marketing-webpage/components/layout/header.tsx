@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, ChevronDown, Download } from "lucide-react";
+import { Menu, ChevronDown, Download, Truck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { LanguageToggle } from "@/components/shared/language-toggle";
@@ -40,6 +40,7 @@ export function Header() {
     <>
       <div className="bg-maroon text-white text-xs py-2 text-center font-medium tracking-wide">
         <div className="flex items-center justify-center gap-2">
+          <Truck className="h-3.5 w-3.5" />
           <span>{t.announcement.text}</span>
         </div>
       </div>
@@ -58,25 +59,20 @@ export function Header() {
                 item.hasDropdown ? (
                   <div key={item.key} className="relative" onMouseEnter={() => setIsOccasionsOpen(true)} onMouseLeave={() => setIsOccasionsOpen(false)}>
                     <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground hover:text-maroon dark:hover:text-gold transition-colors rounded-lg hover:bg-muted cursor-pointer">
-                      {t.nav[item.key]}
-                      <ChevronDown className="h-3.5 w-3.5" />
+                      {t.nav[item.key]}<ChevronDown className="h-3.5 w-3.5" />
                     </button>
                     <AnimatePresence>
                       {isOccasionsOpen && (
                         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} transition={{ duration: 0.2 }} className="absolute top-full left-0 mt-1 w-56 rounded-xl border border-border bg-card shadow-xl p-2">
                           {occasionKeys.map((occ) => (
-                            <span key={occ} className="block rounded-lg px-3 py-2 text-sm text-foreground hover:bg-maroon/10 hover:text-maroon dark:hover:bg-gold/10 dark:hover:text-gold transition-colors cursor-default">
-                              {t.occasions[occ]}
-                            </span>
+                            <span key={occ} className="block rounded-lg px-3 py-2 text-sm text-foreground hover:bg-maroon/10 hover:text-maroon dark:hover:bg-gold/10 dark:hover:text-gold transition-colors cursor-default">{t.occasions[occ]}</span>
                           ))}
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
                 ) : (
-                  <a key={item.key} href={item.href} className="px-3 py-2 text-sm font-medium text-foreground hover:text-maroon dark:hover:text-gold transition-colors rounded-lg hover:bg-muted">
-                    {t.nav[item.key]}
-                  </a>
+                  <a key={item.key} href={item.href} className="px-3 py-2 text-sm font-medium text-foreground hover:text-maroon dark:hover:text-gold transition-colors rounded-lg hover:bg-muted">{t.nav[item.key]}</a>
                 )
               )}
             </nav>
@@ -84,10 +80,7 @@ export function Header() {
               <LanguageToggle />
               <ThemeToggle />
               <Link href="/download" className="hidden sm:flex">
-                <Button variant="gold" size="sm" className="gap-1.5 ml-1">
-                  <Download className="h-3.5 w-3.5" />
-                  {t.nav.downloadApp}
-                </Button>
+                <Button variant="gold" size="sm" className="gap-1.5 ml-1"><Download className="h-3.5 w-3.5" />{t.nav.downloadApp}</Button>
               </Link>
             </div>
           </div>

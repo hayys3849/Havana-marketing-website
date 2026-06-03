@@ -1,16 +1,13 @@
+import { cn } from "@/lib/utils";
 import { calculateDiscount } from "@/lib/calculate-discount";
-import { Badge } from "@/components/ui/badge";
 
-interface BadgeSaleProps {
-  price: number;
-  salePrice: number;
-}
+interface BadgeSaleProps { price: number; salePrice: number; className?: string; }
 
-export function BadgeSale({ price, salePrice }: BadgeSaleProps) {
+export function BadgeSale({ price, salePrice, className }: BadgeSaleProps) {
   const discount = calculateDiscount(price, salePrice);
   return (
-    <Badge variant="gold" className="absolute top-3 left-3 z-10">
+    <span className={cn("absolute top-3 left-3 z-10 rounded-full bg-red-500 px-2.5 py-1 text-xs font-bold text-white shadow-md", className)}>
       -{discount}%
-    </Badge>
+    </span>
   );
 }
