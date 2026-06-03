@@ -1,0 +1,115 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { ShoppingBag } from "lucide-react";
+
+import { cn, formatPrice } from "@/lib/utils";
+import { BadgeSale } from "./badge-sale";
+import { RatingStars } from "./rating-stars";
+import { Badge } from "@/components/ui/badge";
+import { useLanguageStore } from "@/store/language-store";
+import { getDictionary } from "@/i18n";
+import type { Product } from "@/types";
+
+interface ProductCardProps {
+  product: Product;
+  index?: number;
+  className?: string;
+}
+
+export function ProductCard({ product, index = 0, className }: ProductCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
+  const locale = useLanguageStore((s) => s.locale);
+  const t = getDictionary(locale);
+
+  const hasDiscount = product.salePrice && product.salePrice < product.price;
+
+  const handleProductAction = () => {
+    router.push("/download");
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className={cn("group relative cursor-pointer", className)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={handleProductAction}
+    >
+      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-muted">
+        <Image
+          src={product.image}
+          alt={product.name}
+          fill
+          className={cn(
+            "object-cover transition-transform duration-700",
+            isHovered && "scale-110"
+          )}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+        />
+        <div
+          className={cn(
+            "absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300",
+            isHovered ? "opacity-100" : "opacity-0"
+          )}
+        />
+        {hasDiscount && <BadgeSale price={product.price} salePrice={product.salePrice!} />}
+        {product.isNew && !hasDiscount && (
+          <Badge variant="new" className="absolute top-3 left-3 z-10">
+            {t.productCard.new}
+          </Badge>
+        )}
+        {product.isBestSeller && !hasDiscount && !product.isNew && (
+          <Badge variant="gold" className="absolute top-3 left-3 z-10">
+            {t.productCard.bestSeller}
+          </Badge>
+        )}
+        {/* Order in App button — always visible on mobile, hover on desktop */}
+        <div
+          className={cn(
+            "absolute bottom-4 left-4 right-4 transition-all duration-300",
+            isHovered ? "sm:opacity-100 sm:translate-y-0" : "sm:opacity-0 sm:translate-y-4",
+            "opacity-100 translate-y-0"
+          )}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleProductAction();
+            }}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-gold hover:bg-gold-dark text-dark-bg font-semibold py-3 text-sm shadow-lg transition-colors cursor-pointer"
+          >
+            <ShoppingBag className="h-4 w-4" />
+            {t.productCard.orderInApp}
+          </button>
+        </div>
+      </div>
+      <div className="mt-3 space-y-1.5">
+        <h3 className="font-medium text-sm line-clamp-1 text-foreground group-hover:text-maroon dark:group-hover:text-gold transition-colors">
+          {product.name}
+        </h3>
+        <div className="flex items-center gap-1.5">
+          <RatingStars rating={product.rating} />
+          <span className="text-xs text-muted-foreground">({product.reviewCount})</span>
+        </div>
+        <div className="flex items-center gap-2">
+          {hasDiscount ? (
+            <>
+              <span className="font-bold text-maroon dark:text-gold">{formatPrice(product.salePrice!)}</span>
+              <span className="text-sm text-muted-foreground line-through">{formatPrice(product.price)}</span>
+            </>
+          ) : (
+            <span className="font-bold text-foreground">{formatPrice(product.price)}</span>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}

@@ -1,0 +1,32 @@
+"use client";
+
+import { useMemo } from "react";
+import { SectionHeader } from "@/components/shared/section-header";
+import { ProductCard } from "@/components/shared/product-card";
+import { StaggerContainer, StaggerItem } from "@/components/shared/stagger-container";
+import { useLanguageStore } from "@/store/language-store";
+import { getDictionary } from "@/i18n";
+import { getBestSellerProducts } from "@/lib/data";
+
+export function BestSellers() {
+  const locale = useLanguageStore((s) => s.locale);
+  const t = getDictionary(locale);
+  const products = useMemo(() => getBestSellerProducts(locale), [locale]);
+
+  if (products.length === 0) return null;
+
+  return (
+    <section id="categories" className="py-20 lg:py-28 bg-muted/50">
+      <div className="container mx-auto px-4 lg:px-8">
+        <SectionHeader title={t.bestSellers.title} subtitle={t.bestSellers.subtitle} />
+        <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {products.map((product, index) => (
+            <StaggerItem key={product.id}>
+              <ProductCard product={product} index={index} />
+            </StaggerItem>
+          ))}
+        </StaggerContainer>
+      </div>
+    </section>
+  );
+}

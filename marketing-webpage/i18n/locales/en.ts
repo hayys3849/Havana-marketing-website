@@ -1,0 +1,21 @@
+import type { Translation } from "../types";
+
+const en: Translation = {
+  dir: "ltr",
+  announcement: { text: "Free delivery over KWD 50" },
+  nav: { home: "Home", shop: "Shop", categories: "Categories", occasions: "Occasions", about: "About", contact: "Contact", downloadApp: "Download App" },
+  occasions: { eid: "Eid", weddings: "Weddings", birthday: "Birthday", anniversary: "Anniversary", graduation: "Graduation", mothersDay: "Mother's Day", loveRomance: "Love & Romance", sympathy: "Sympathy" },
+  hero: { badge: "Kuwait's Premier Floral Boutique", title: "Luxury Floral Artistry", description: "Experience the finest flower arrangements crafted with passion and elegance for every special moment in Kuwait.", shopCollection: "Shop Collection", customOrders: "Custom Orders", scroll: "Scroll" },
+  shopByOccasion: { title: "Shop by Occasion", subtitle: "Find the perfect arrangement for every celebration" },
+  whyChooseUs: { title: "Why Choose Havana Flowers", subtitle: "We deliver excellence with every petal", sameDay: { title: "Same-Day Delivery", description: "Order before 2 PM and receive your flowers the very same day across Kuwait." }, freshness: { title: "7-Day Freshness", description: "Our flowers stay fresh and vibrant for a minimum of 7 days guaranteed." }, premium: { title: "Premium Quality", description: "Hand-selected blooms sourced from the world's finest flower farms." }, support: { title: "24/7 Support", description: "Round-the-clock customer service for all your floral needs." }, personalized: { title: "Personalized Touch", description: "Custom arrangements tailored to your exact preferences and vision." }, eco: { title: "Eco-Conscious", description: "Sustainable packaging and eco-friendly practices at every step." } },
+  featuredCollection: { title: "Featured Collection", subtitle: "Handpicked selections from our master florists" },
+  bestSellers: { title: "Best Sellers", subtitle: "Most loved arrangements by our customers" },
+  productCard: { bestSeller: "Best Seller", new: "New", orderInApp: "Order in App" },
+  newsletter: { exclusive: "Exclusive", title: "Stay in Bloom", description: "Subscribe to receive exclusive offers, new arrivals, and floral inspiration.", placeholder: "Enter your email address", subscribe: "Subscribe", thankYou: "Thank you for subscribing!", privacy: "By subscribing, you agree to our Privacy Policy." },
+  footer: { about: "Havana Flowers is Kuwait's premier luxury floral boutique, delivering exquisite arrangements crafted with passion and precision since 2018.", quickLinks: "Quick Links", faq: "FAQ", shippingPolicy: "Shipping Policy", returnsRefunds: "Returns & Refunds", privacyPolicy: "Privacy Policy", termsOfService: "Terms of Service", customerService: "Customer Service", trackOrder: "Track Order", giftCards: "Gift Cards", corporateOrders: "Corporate Orders", contactInfo: "Contact Info", address: "Salmiya, Salem Al Mubarak St, Kuwait City, Kuwait", hours: "Sat-Thu: 9AM - 10PM | Fri: 2PM - 10PM", copyright: "Havana Flowers. All rights reserved.", downloadApp: "Download App" },
+  mobileNav: { occasions: "Occasions", downloadApp: "Download App" },
+  language: { en: "EN", ar: "عربي" },
+  download: { badge: "Mobile App", title: "Order Through Our App", subtitle: "The easiest way to send beautiful flowers in Kuwait", description: "Ordering is only available through our mobile app. Download now to browse our full collection, place orders, track deliveries, and enjoy exclusive app-only offers.", feature1Title: "Easy Ordering", feature1Desc: "Browse and order beautiful arrangements in just a few taps", feature2Title: "Real-Time Tracking", feature2Desc: "Track your delivery from our shop to your doorstep", feature3Title: "Exclusive Deals", feature3Desc: "App-only discounts and early access to new collections", feature4Title: "Saved Preferences", feature4Desc: "Quick reorder your favorites and save delivery addresses", playStoreButton: "Get it on Google Play", apkButton: "Download APK", apkNote: "Direct download for Android devices", minVersion: "Requires Android 6.0 or later", backToHome: "Back to Home", whyAppTitle: "Why Use the App?", whyAppSubtitle: "Everything you love about Havana, now in your pocket", ctaTitle: "Ready to Send Flowers?", ctaSubtitle: "Download the app and make someone's day special" },
+};
+
+export default en;

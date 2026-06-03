@@ -1,0 +1,24 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { Locale } from "@/i18n";
+
+interface LanguageStore {
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+  toggleLocale: () => void;
+}
+
+export const useLanguageStore = create<LanguageStore>()(
+  persist(
+    (set) => ({
+      locale: "en",
+      setLocale: (locale) => set({ locale }),
+      toggleLocale: () =>
+        set((state) => ({ locale: state.locale === "en" ? "ar" : "en" })),
+    }),
+    {
+      name: "havana-language",
+      skipHydration: true,
+    }
+  )
+);
