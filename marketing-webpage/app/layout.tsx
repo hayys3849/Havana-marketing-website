@@ -2,9 +2,13 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display, Noto_Sans_Arabic } from "next/font/google";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { DirectionProvider } from "@/components/shared/direction-provider";
+<<<<<<< HEAD
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { MobileNav } from "@/components/layout/mobile-nav";
+=======
+import { LayoutShell } from "@/components/layout/layout-shell";
+>>>>>>> 6bfdf93 (android web application created (not responsive yet))
 import { SITE_URL, SITE_NAME } from "@/lib/config";
 import "./globals.css";
 
@@ -46,10 +50,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${inter.variable} ${playfair.variable} ${notoArabic.variable} antialiased`}>
         <ThemeProvider>
           <DirectionProvider>
+<<<<<<< HEAD
             <Header />
             <MobileNav />
             <main>{children}</main>
             <Footer />
+=======
+            <LayoutShell>{children}</LayoutShell>
+>>>>>>> 6bfdf93 (android web application created (not responsive yet))
           </DirectionProvider>
         </ThemeProvider>
       </body>

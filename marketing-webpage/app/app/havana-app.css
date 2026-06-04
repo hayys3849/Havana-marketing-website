@@ -1,0 +1,128 @@
+.havana-app {
+  --havana-maroon: #6d0f1b;
+  --havana-maroon-light: #8b1a2b;
+  --havana-gold: #c9a227;
+  --havana-cream: #f8f5f2;
+  --havana-dark-bg: #0b0b0b;
+  --havana-dark-card: #141414;
+  --havana-dark-surface: #1a1a1a;
+  --havana-text: #1a1a1a;
+  --havana-text-muted: #737373;
+  --havana-error: #ef4444;
+  --havana-success: #10b981;
+  --havana-divider: #f0ece8;
+  --havana-nav-bg: #fff;
+  --havana-topbar-bg: #f8f5f2;
+  --havana-checkout-bar-bg: #f8f5f2;
+  min-height: 100dvh;
+  background: var(--havana-cream);
+  color: var(--havana-text);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.havana-app.dark {
+  --havana-text: #ededed;
+  --havana-text-muted: #a3a3a3;
+  --havana-divider: #2a2a2a;
+  --havana-nav-bg: #111;
+  --havana-topbar-bg: #0b0b0b;
+  --havana-checkout-bar-bg: #0b0b0b;
+  background: var(--havana-dark-bg);
+}
+
+.havana-shell {
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .havana-shell {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .havana-shell {
+    max-width: 960px;
+  }
+}
+
+.havana-app .havana-primary {
+  color: var(--havana-maroon);
+}
+
+.havana-app.dark .havana-primary {
+  color: var(--havana-gold);
+}
+
+.havana-app .havana-btn-primary {
+  background: var(--havana-maroon);
+  color: #fff;
+}
+
+.havana-app.dark .havana-btn-primary {
+  background: var(--havana-gold);
+  color: #0b0b0b;
+}
+
+.havana-app .havana-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+}
+
+.havana-app.dark .havana-card {
+  background: var(--havana-dark-card);
+}
+
+.havana-app .havana-input {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  padding: 12px 14px;
+  background: #fff;
+  color: var(--havana-text);
+}
+
+.havana-app.dark .havana-input {
+  border-color: #333;
+  background: var(--havana-dark-surface);
+}
+
+.havana-app .havana-nav {
+  border-top: 1px solid #f0ece8;
+  background: var(--havana-nav-bg);
+}
+
+.havana-app.dark .havana-nav {
+  border-color: #2a2a2a;
+}
+
+.havana-app .havana-topbar {
+  background: var(--havana-topbar-bg);
+}
+
+.havana-app .havana-checkout-bar {
+  background: var(--havana-checkout-bar-bg);
+}
+
+.havana-app .havana-divider {
+  border: none;
+  border-top: 1px solid var(--havana-divider);
+}
+
+.havana-app[dir="rtl"] .havana-product-grid {
+  direction: rtl;
+}
+
+@media (min-width: 1024px) {
+  .havana-app .havana-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .havana-app .havana-product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
