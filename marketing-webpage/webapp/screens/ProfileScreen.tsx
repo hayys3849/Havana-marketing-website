@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Pencil, MapPin } from "lucide-react";
 import { AppShell } from "../components/AppShell";
+import { LogoutConfirmDialog } from "../components/LogoutConfirmDialog";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { useAppStrings } from "../hooks/use-app-strings";
 import { profileLanguageLabel, profileLanguageSubtitle } from "../i18n";
@@ -150,6 +151,7 @@ export function ProfileScreen({
   const isArabic = locale === "ar";
 
   const [editingField, setEditingField] = useState<EditableField | null>(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const saveProfile = (values: Record<string, string>) => {
     if (editingField === "FULL_NAME") {
@@ -297,13 +299,23 @@ export function ProfileScreen({
             <button
               type="button"
               className="mt-6 w-full rounded-xl border border-[var(--havana-error)]/50 py-3 text-[15px] font-semibold text-[var(--havana-error)]"
-              onClick={onLogoutClick}
+              onClick={() => setShowLogoutConfirm(true)}
             >
               {t.profile_logout}
             </button>
           </div>
         </div>
       </div>
+
+      {showLogoutConfirm && (
+        <LogoutConfirmDialog
+          onCancel={() => setShowLogoutConfirm(false)}
+          onConfirm={() => {
+            setShowLogoutConfirm(false);
+            onLogoutClick();
+          }}
+        />
+      )}
     </AppShell>
   );
 }

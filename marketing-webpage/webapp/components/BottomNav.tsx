@@ -1,30 +1,18 @@
 "use client";
 
-import { Home, ShoppingCart, Receipt, User } from "lucide-react";
 import { useAppStrings } from "../hooks/use-app-strings";
+import { buildMainNavItems, type MainNavProps } from "./main-nav-config";
 
-interface BottomNavProps {
-  active: "home" | "cart" | "orders" | "profile";
-  onHome: () => void;
-  onCart: () => void;
-  onOrders: () => void;
-  onProfile: () => void;
-}
+export type { MainNavProps } from "./main-nav-config";
 
-export function BottomNav({ active, onHome, onCart, onOrders, onProfile }: BottomNavProps) {
+export function BottomNav(props: MainNavProps) {
   const t = useAppStrings();
-
-  const items = [
-    { key: "home" as const, label: t.nav_home, icon: Home, onClick: onHome },
-    { key: "cart" as const, label: t.nav_cart, icon: ShoppingCart, onClick: onCart },
-    { key: "orders" as const, label: t.nav_orders, icon: Receipt, onClick: onOrders },
-    { key: "profile" as const, label: t.nav_profile, icon: User, onClick: onProfile },
-  ];
+  const items = buildMainNavItems(t, props);
 
   return (
     <nav className="havana-nav fixed bottom-0 left-0 right-0 z-40 mx-auto flex w-full max-w-[960px] justify-around px-2 py-2 safe-area-pb lg:hidden">
       {items.map(({ key, label, icon: Icon, onClick }) => {
-        const selected = active === key;
+        const selected = props.active === key;
         return (
           <button
             key={key}

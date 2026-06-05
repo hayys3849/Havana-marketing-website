@@ -38,7 +38,3 @@ export function getDictionary(locale: Locale): Translation {
   }
   return dict;
 }
-
-export function clearDictCache(): void {
-  dictCache.clear();
-}

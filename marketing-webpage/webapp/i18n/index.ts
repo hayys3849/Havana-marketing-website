@@ -1,7 +1,8 @@
 import { ar } from "./ar";
 import { en } from "./en";
+import type { AppLocale } from "../types";
 
-export type AppLocale = "en" | "ar";
+export type { AppLocale };
 export type AppStrings = Record<string, string>;
 
 const locales: Record<AppLocale, AppStrings> = { en, ar };

@@ -3,7 +3,7 @@
 import { AppShell } from "../components/AppShell";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { useAppStrings } from "../hooks/use-app-strings";
-import { formatKd } from "../mock/catalog";
+import { formatKd } from "../services/catalog-service";
 import { useHavanaStore } from "../state/havana-store";
 
 interface OrderDetailsScreenProps {

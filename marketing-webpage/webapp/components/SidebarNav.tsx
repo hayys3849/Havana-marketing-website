@@ -1,25 +1,13 @@
 "use client";
 
-import { Home, ShoppingCart, Receipt, User } from "lucide-react";
 import { useAppStrings } from "../hooks/use-app-strings";
+import { buildMainNavItems, type MainNavProps } from "./main-nav-config";
 
-export interface MainNavProps {
-  active: "home" | "cart" | "orders" | "profile";
-  onHome: () => void;
-  onCart: () => void;
-  onOrders: () => void;
-  onProfile: () => void;
-}
+export type { MainNavProps } from "./main-nav-config";
 
-export function SidebarNav({ active, onHome, onCart, onOrders, onProfile }: MainNavProps) {
+export function SidebarNav(props: MainNavProps) {
   const t = useAppStrings();
-
-  const items = [
-    { key: "home" as const, label: t.nav_home, icon: Home, onClick: onHome },
-    { key: "cart" as const, label: t.nav_cart, icon: ShoppingCart, onClick: onCart },
-    { key: "orders" as const, label: t.nav_orders, icon: Receipt, onClick: onOrders },
-    { key: "profile" as const, label: t.nav_profile, icon: User, onClick: onProfile },
-  ];
+  const items = buildMainNavItems(t, props);
 
   return (
     <aside className="havana-sidebar hidden lg:flex lg:flex-col">
@@ -31,7 +19,7 @@ export function SidebarNav({ active, onHome, onCart, onOrders, onProfile }: Main
       </div>
       <nav className="flex flex-1 flex-col gap-1 px-3">
         {items.map(({ key, label, icon: Icon, onClick }) => {
-          const selected = active === key;
+          const selected = props.active === key;
           return (
             <button
               key={key}

@@ -222,6 +222,8 @@ export const ar = {
   "profile_language_desc": "التبديل إلى الإنجليزية",
   "profile_language_arabic": "التبديل إلى العربية",
   "profile_logout": "تسجيل الخروج",
+  "profile_logout_confirm_title": "تسجيل الخروج",
+  "profile_logout_confirm_message": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
   "profile_error_not_logged_in": "غير مسجّل الدخول",
   "profile_error_load": "فشل تحميل الملف الشخصي",
   "profile_error_update": "فشل تحديث الملف الشخصي",

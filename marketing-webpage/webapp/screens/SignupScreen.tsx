@@ -1,3 +1,7 @@
+/**
+ * Reserved for future authentication integration.
+ * Not wired into the active /app navigation flow.
+ */
 "use client";
 
 import { useState } from "react";

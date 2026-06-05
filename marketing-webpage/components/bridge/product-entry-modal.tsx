@@ -6,11 +6,10 @@ import { useProductEntryStore } from "@/store/product-entry-store";
 export function ProductEntryModal() {
   const router = useRouter();
   const closeModal = useProductEntryStore((s) => s.closeModal);
-  const openGooglePicker = useProductEntryStore((s) => s.openGooglePicker);
 
   const handleWebApp = () => {
     closeModal();
-    openGooglePicker();
+    router.push("/app");
   };
 
   const handleDownload = () => {
@@ -42,7 +41,7 @@ export function ProductEntryModal() {
             onClick={handleWebApp}
             className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted dark:bg-zinc-800 dark:hover:bg-zinc-700"
           >
-            Continue to Web App using Google
+            Continue to Web App
           </button>
           <button
             type="button"

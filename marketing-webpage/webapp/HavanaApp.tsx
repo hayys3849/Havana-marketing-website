@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useHavanaStore } from "./state/havana-store";
-import { LoginScreen } from "./screens/LoginScreen";
-import { SignupScreen } from "./screens/SignupScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { ProductDetailsScreen } from "./screens/ProductDetailsScreen";
 import { CartScreen } from "./screens/CartScreen";
@@ -15,11 +13,10 @@ import { OrderDetailsScreen } from "./screens/OrderDetailsScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
 
 export function HavanaApp() {
-  const isLoggedIn = useHavanaStore((s) => s.isLoggedIn);
+  const router = useRouter();
   const currentScreen = useHavanaStore((s) => s.currentScreen);
   const navigate = useHavanaStore((s) => s.navigate);
   const signOut = useHavanaStore((s) => s.signOut);
-  const loginKey = useHavanaStore((s) => s.loginKey);
   const setSelectedProductId = useHavanaStore((s) => s.setSelectedProductId);
   const selectedProductId = useHavanaStore((s) => s.selectedProductId);
   const selectedOrderId = useHavanaStore((s) => s.selectedOrderId);
@@ -29,28 +26,12 @@ export function HavanaApp() {
   const selectedAddress = useHavanaStore((s) => s.selectedAddress);
   const updateOrderStatus = useHavanaStore((s) => s.updateOrderStatus);
 
-  useEffect(() => {
-    if (!isLoggedIn && currentScreen !== "login" && currentScreen !== "signup") {
-      navigate("login");
-    }
-  }, [isLoggedIn, currentScreen, navigate]);
+  const handleLogout = () => {
+    signOut();
+    router.replace("/");
+  };
 
   switch (currentScreen) {
-    case "login":
-      return (
-        <LoginScreen
-          key={loginKey}
-          onLoginSuccess={() => navigate("home")}
-          onNavigateToSignup={() => navigate("signup")}
-        />
-      );
-    case "signup":
-      return (
-        <SignupScreen
-          onNavigateToLogin={() => navigate("login")}
-          onSignupSuccess={() => navigate("home")}
-        />
-      );
     case "home":
       return (
         <HomeScreen
@@ -135,10 +116,20 @@ export function HavanaApp() {
           onHomeClick={() => navigate("home")}
           onCartClick={() => navigate("cart")}
           onOrdersClick={() => navigate("orders")}
-          onLogoutClick={signOut}
+          onLogoutClick={handleLogout}
         />
       );
     default:
-      return null;
+      return (
+        <HomeScreen
+          onProductClick={(id) => {
+            setSelectedProductId(id);
+            navigate("productDetails");
+          }}
+          onCartClick={() => navigate("cart")}
+          onOrdersClick={() => navigate("orders")}
+          onProfileClick={() => navigate("profile")}
+        />
+      );
   }
 }

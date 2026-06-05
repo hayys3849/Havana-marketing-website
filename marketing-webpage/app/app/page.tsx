@@ -1,21 +1,16 @@
 "use client";
 
 import { Suspense, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import { HavanaApp } from "@/webapp/HavanaApp";
 import { ThemeSync } from "@/webapp/components/ThemeSync";
 import { useHavanaStore } from "@/webapp/state/havana-store";
 
 function WebAppEntry() {
-  const searchParams = useSearchParams();
-  const bootstrapFromMarketing = useHavanaStore((s) => s.bootstrapFromMarketing);
+  const enterApp = useHavanaStore((s) => s.enterApp);
 
   useEffect(() => {
-    if (searchParams.get("from") === "google-mock") {
-      bootstrapFromMarketing();
-      window.history.replaceState({}, "", "/app");
-    }
-  }, [searchParams, bootstrapFromMarketing]);
+    enterApp();
+  }, [enterApp]);
 
   return (
     <>

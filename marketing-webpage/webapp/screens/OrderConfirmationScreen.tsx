@@ -3,7 +3,7 @@
 import { CheckCircle } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useAppStrings } from "../hooks/use-app-strings";
-import { formatKd } from "../mock/catalog";
+import { formatKd } from "../services/catalog-service";
 import type { Order } from "../types";
 
 interface OrderConfirmationScreenProps {

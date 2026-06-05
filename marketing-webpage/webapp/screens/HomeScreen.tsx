@@ -1,10 +1,10 @@
 "use client";
 
 import { useMemo } from "react";
-import { Search, ShoppingCart } from "lucide-react";
+import { Search } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useAppStrings } from "../hooks/use-app-strings";
-import { PRODUCTS, CATEGORIES, categoryEmoji, formatKd, displayPrice } from "../mock/catalog";
+import { catalogService, categoryEmoji, displayPrice, formatKd } from "../services/catalog-service";
 import { useHavanaStore } from "../state/havana-store";
 import type { WebProduct } from "../types";
 
@@ -68,19 +68,14 @@ export function HomeScreen({
   const selectedCategory = useHavanaStore((s) => s.selectedCategory);
   const setSelectedCategory = useHavanaStore((s) => s.setSelectedCategory);
 
-  const filtered = useMemo(() => {
-    const q = searchQuery.toLowerCase().trim();
-    return PRODUCTS.filter((p) => {
-      const matchesSearch =
-        !q || p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q);
-      const matchesCategory =
-        selectedCategory === "All" || p.categoryName === selectedCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [searchQuery, selectedCategory]);
+  const filtered = useMemo(
+    () => catalogService.filterProducts(searchQuery, selectedCategory),
+    [searchQuery, selectedCategory],
+  );
 
-  const featured = PRODUCTS.filter((p) => p.isFeatured);
-  const topSelling = PRODUCTS.filter((p) => p.isBestSeller);
+  const featured = catalogService.getFeaturedProducts();
+  const topSelling = catalogService.getBestSellerProducts();
+  const categories = catalogService.getCategories();
   const showSections = !searchQuery && selectedCategory === "All";
 
   return (
@@ -95,16 +90,11 @@ export function HomeScreen({
       }}
     >
       <header className="havana-topbar sticky top-0 z-30 px-4 py-3 md:px-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-xl font-bold tracking-[0.2em] havana-primary md:text-2xl">{t.home_brand}</h1>
-            <p className="text-[10px] font-medium tracking-[0.15em] text-[var(--havana-gold)] md:text-xs">
-              {t.home_tagline}
-            </p>
-          </div>
-          <button type="button" onClick={onCartClick} className="havana-primary p-2" aria-label={t.nav_cart}>
-            <ShoppingCart className="h-6 w-6" />
-          </button>
+        <div>
+          <h1 className="text-xl font-bold tracking-[0.2em] havana-primary md:text-2xl">{t.home_brand}</h1>
+          <p className="text-[10px] font-medium tracking-[0.15em] text-[var(--havana-gold)] md:text-xs">
+            {t.home_tagline}
+          </p>
         </div>
       </header>
 
@@ -120,7 +110,7 @@ export function HomeScreen({
         </div>
 
         <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
-          {CATEGORIES.map((cat) => {
+          {categories.map((cat) => {
             const selected = selectedCategory === cat.name;
             return (
               <button

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { useAppStrings } from "../hooks/use-app-strings";
-import { PRODUCTS, categoryEmoji, formatKd, displayPrice } from "../mock/catalog";
+import { catalogService, categoryEmoji, displayPrice, formatKd } from "../services/catalog-service";
 import { useHavanaStore } from "../state/havana-store";
 
 interface ProductDetailsScreenProps {
@@ -23,7 +23,7 @@ export function ProductDetailsScreen({
   const t = useAppStrings();
   const [quantity, setQuantity] = useState(1);
   const addToCart = useHavanaStore((s) => s.addToCart);
-  const product = PRODUCTS.find((p) => p.id === productId);
+  const product = catalogService.getProductById(productId);
 
   if (!product) {
     return (

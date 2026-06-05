@@ -222,6 +222,8 @@ export const en = {
   "profile_language_desc": "Switch to Arabic",
   "profile_language_arabic": "Switch to English",
   "profile_logout": "Logout",
+  "profile_logout_confirm_title": "Logout",
+  "profile_logout_confirm_message": "Are you sure you want to logout?",
   "profile_error_not_logged_in": "Not logged in",
   "profile_error_load": "Failed to load profile",
   "profile_error_update": "Failed to update profile",

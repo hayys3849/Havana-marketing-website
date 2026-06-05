@@ -8,8 +8,7 @@ import type {
   ThemeMode,
   UserProfile,
 } from "../types";
-import { profileDisplayName } from "../types";
-import { PRODUCTS } from "../mock/catalog";
+import { catalogService } from "../services/catalog-service";
 
 const DELIVERY_FEE = 2.0;
 
@@ -20,6 +19,20 @@ const defaultProfile: UserProfile = {
   phone: "+965 5000 0000",
   emailVerified: true,
   deliveryAddressFull: null,
+};
+
+const initialSessionState = {
+  currentScreen: "home" as AppScreen,
+  selectedProductId: null as string | null,
+  selectedAddress: null as DeliveryAddress | null,
+  selectedOrderId: null as string | null,
+  lastPlacedOrder: null as Order | null,
+  cart: [] as CartItem[],
+  orders: [] as Order[],
+  profile: defaultProfile,
+  searchQuery: "",
+  selectedCategory: "All",
+  ordersFilter: "all",
 };
 
 function normalizeProfile(patch: Partial<UserProfile> & { name?: string }): Partial<UserProfile> {
@@ -34,8 +47,6 @@ function normalizeProfile(patch: Partial<UserProfile> & { name?: string }): Part
 }
 
 interface HavanaStore {
-  isLoggedIn: boolean;
-  loginKey: number;
   currentScreen: AppScreen;
   selectedProductId: string | null;
   selectedAddress: DeliveryAddress | null;
@@ -50,16 +61,17 @@ interface HavanaStore {
   selectedCategory: string;
   ordersFilter: string;
 
-  bootstrapFromMarketing: () => void;
-  signIn: (profile?: Partial<UserProfile> & { name?: string; email?: string }) => void;
+  /** Ensures the app session is ready (used on /app entry). */
+  enterApp: () => void;
+  /** Clears runtime session state. Caller handles redirect to landing page. */
   signOut: () => void;
+  /** Reserved for future authentication integration (LoginScreen / SignupScreen). */
+  signIn: (profile?: Partial<UserProfile> & { name?: string; email?: string }) => void;
   navigate: (screen: AppScreen) => void;
   setSelectedProductId: (id: string | null) => void;
   setSelectedAddress: (address: DeliveryAddress | null) => void;
   setSelectedOrderId: (id: string | null) => void;
-  setLastPlacedOrder: (order: Order | null) => void;
   setThemeMode: (mode: ThemeMode) => void;
-  setLocale: (locale: AppLocale) => void;
   toggleArabic: (enabled: boolean) => void;
   setSearchQuery: (q: string) => void;
   setSelectedCategory: (name: string) => void;
@@ -68,7 +80,6 @@ interface HavanaStore {
   addToCart: (productId: string, quantity?: number) => void;
   updateCartQuantity: (productId: string, quantity: number) => void;
   removeFromCart: (productId: string) => void;
-  clearCart: () => void;
   cartSubtotal: () => number;
   cartItemCount: () => number;
   placeOrder: (payload: {
@@ -82,35 +93,12 @@ interface HavanaStore {
 }
 
 export const useHavanaStore = create<HavanaStore>((set, get) => ({
-  isLoggedIn: false,
-  loginKey: 0,
-  currentScreen: "login",
-  selectedProductId: null,
-  selectedAddress: null,
-  selectedOrderId: null,
-  lastPlacedOrder: null,
+  ...initialSessionState,
   themeMode: "system",
   locale: "en",
-  cart: [],
-  orders: [],
-  profile: defaultProfile,
-  searchQuery: "",
-  selectedCategory: "All",
-  ordersFilter: "all",
 
-  bootstrapFromMarketing: () => {
-    set({
-      isLoggedIn: true,
-      currentScreen: "home",
-      profile: {
-        firstName: "Google",
-        lastName: "Demo",
-        email: "demo.user@gmail.com",
-        phone: "+965 5123 4567",
-        emailVerified: true,
-        deliveryAddressFull: null,
-      },
-    });
+  enterApp: () => {
+    set({ currentScreen: "home" });
   },
 
   signIn: (profile) => {
@@ -121,41 +109,31 @@ export const useHavanaStore = create<HavanaStore>((set, get) => ({
       normalized.lastName = normalized.lastName || "";
     }
     set((s) => ({
-      isLoggedIn: true,
       currentScreen: "home",
       profile: { ...s.profile, ...normalized },
     }));
   },
 
   signOut: () => {
-    set((s) => ({
-      isLoggedIn: false,
-      loginKey: s.loginKey + 1,
-      currentScreen: "login",
-      cart: [],
-      selectedProductId: null,
-      selectedAddress: null,
-      selectedOrderId: null,
-      lastPlacedOrder: null,
-      profile: defaultProfile,
-      ordersFilter: "all",
-    }));
+    set({
+      ...initialSessionState,
+      themeMode: get().themeMode,
+      locale: get().locale,
+    });
   },
 
   navigate: (screen) => set({ currentScreen: screen }),
   setSelectedProductId: (id) => set({ selectedProductId: id }),
   setSelectedAddress: (address) => set({ selectedAddress: address }),
   setSelectedOrderId: (id) => set({ selectedOrderId: id }),
-  setLastPlacedOrder: (order) => set({ lastPlacedOrder: order }),
   setThemeMode: (mode) => set({ themeMode: mode }),
-  setLocale: (locale) => set({ locale }),
   toggleArabic: (enabled) => set({ locale: enabled ? "ar" : "en" }),
   setSearchQuery: (q) => set({ searchQuery: q }),
   setSelectedCategory: (name) => set({ selectedCategory: name }),
   setOrdersFilter: (filter) => set({ ordersFilter: filter }),
 
   addToCart: (productId, quantity = 1) => {
-    const product = PRODUCTS.find((p) => p.id === productId);
+    const product = catalogService.getProductById(productId);
     if (!product || !product.inStock) return;
     const price =
       product.isOnSale && product.salePrice != null ? product.salePrice : product.price;
@@ -198,8 +176,6 @@ export const useHavanaStore = create<HavanaStore>((set, get) => ({
   removeFromCart: (productId) => {
     set((s) => ({ cart: s.cart.filter((c) => c.productId !== productId) }));
   },
-
-  clearCart: () => set({ cart: [] }),
 
   cartSubtotal: () => get().cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
 
@@ -248,6 +224,3 @@ export const useHavanaStore = create<HavanaStore>((set, get) => ({
     set((s) => ({ profile: { ...s.profile, ...normalizeProfile(patch) } }));
   },
 }));
-
-/** Used when placing orders from checkout */
-export { profileDisplayName };
