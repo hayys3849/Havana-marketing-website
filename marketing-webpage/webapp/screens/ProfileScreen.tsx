@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Pencil, MapPin } from "lucide-react";
 import { AppShell } from "../components/AppShell";
-import { BottomNav } from "../components/BottomNav";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { useAppStrings } from "../hooks/use-app-strings";
 import { profileLanguageLabel, profileLanguageSubtitle } from "../i18n";
@@ -164,139 +163,147 @@ export function ProfileScreen({
   };
 
   return (
-    <AppShell withBottomNav className="pb-24">
+    <AppShell
+      withBottomNav
+      className="pb-24 lg:pb-0"
+      nav={{
+        active: "profile",
+        onHome: onHomeClick,
+        onCart: onCartClick,
+        onOrders: onOrdersClick,
+        onProfile: () => {},
+      }}
+    >
       <ScreenHeader title={t.profile_title} onBack={onBackClick} />
 
       <div className="flex-1 px-4 pb-6 md:px-6">
-        <ProfileHeader profile={profile} t={t} />
+        <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-6">
+          <div>
+            <ProfileHeader profile={profile} t={t} />
 
-        <SectionHeader title={t.profile_section_personal} />
-        <div className="havana-card overflow-hidden">
-          {editingField === "FULL_NAME" ? (
-            <FieldEditor
-              label={t.profile_full_name}
-              t={t}
-              fields={[
-                { key: "firstName", label: t.profile_first_name, value: profile.firstName },
-                { key: "lastName", label: t.profile_last_name, value: profile.lastName },
-              ]}
-              onSave={saveProfile}
-              onCancel={() => setEditingField(null)}
-            />
-          ) : (
-            <ProfileInfoRow
-              label={t.profile_full_name}
-              value={profileDisplayName(profile)}
-              editable
-              onEdit={() => setEditingField("FULL_NAME")}
-            />
-          )}
-          <hr className="havana-divider mx-3" />
-          <ProfileInfoRow label={t.profile_email} value={profile.email} />
-          <hr className="havana-divider mx-3" />
-          {editingField === "CONTACT_NUMBER" ? (
-            <FieldEditor
-              label={t.profile_contact}
-              t={t}
-              fields={[{ key: "phone", label: t.profile_phone_hint, value: profile.phone }]}
-              onSave={saveProfile}
-              onCancel={() => setEditingField(null)}
-            />
-          ) : (
-            <ProfileInfoRow
-              label={t.profile_contact}
-              value={profile.phone}
-              editable
-              onEdit={() => setEditingField("CONTACT_NUMBER")}
-            />
-          )}
-        </div>
+            <SectionHeader title={t.profile_section_personal} />
+            <div className="havana-card overflow-hidden">
+              {editingField === "FULL_NAME" ? (
+                <FieldEditor
+                  label={t.profile_full_name}
+                  t={t}
+                  fields={[
+                    { key: "firstName", label: t.profile_first_name, value: profile.firstName },
+                    { key: "lastName", label: t.profile_last_name, value: profile.lastName },
+                  ]}
+                  onSave={saveProfile}
+                  onCancel={() => setEditingField(null)}
+                />
+              ) : (
+                <ProfileInfoRow
+                  label={t.profile_full_name}
+                  value={profileDisplayName(profile)}
+                  editable
+                  onEdit={() => setEditingField("FULL_NAME")}
+                />
+              )}
+              <hr className="havana-divider mx-3" />
+              <ProfileInfoRow label={t.profile_email} value={profile.email} />
+              <hr className="havana-divider mx-3" />
+              {editingField === "CONTACT_NUMBER" ? (
+                <FieldEditor
+                  label={t.profile_contact}
+                  t={t}
+                  fields={[{ key: "phone", label: t.profile_phone_hint, value: profile.phone }]}
+                  onSave={saveProfile}
+                  onCancel={() => setEditingField(null)}
+                />
+              ) : (
+                <ProfileInfoRow
+                  label={t.profile_contact}
+                  value={profile.phone}
+                  editable
+                  onEdit={() => setEditingField("CONTACT_NUMBER")}
+                />
+              )}
+            </div>
 
-        <SectionHeader title={t.profile_section_address} />
-        <div className="havana-card overflow-hidden">
-          {editingField === "DELIVERY_ADDRESS" ? (
-            <FieldEditor
-              label={t.profile_address}
-              t={t}
-              fields={[
-                {
-                  key: "address",
-                  label: t.profile_address_hint,
-                  value: profile.deliveryAddressFull ?? "",
-                  multiline: true,
-                },
-              ]}
-              onSave={saveProfile}
-              onCancel={() => setEditingField(null)}
-            />
-          ) : (
-            <ProfileInfoRow
-              label={t.profile_address}
-              value={profile.deliveryAddressFull ?? t.profile_address_not_set}
-              editable
-              onEdit={() => setEditingField("DELIVERY_ADDRESS")}
-              leadingIcon={<MapPin className="mt-1 h-[18px] w-[18px] havana-primary" />}
-            />
-          )}
-        </div>
-
-        <SectionHeader title={t.profile_section_preferences} />
-        <div className="havana-card overflow-hidden">
-          <div className="px-3 py-3">
-            <p className="text-sm font-medium">{t.profile_dark_mode}</p>
-            <p className="text-xs text-[var(--havana-text-muted)]">{t.profile_dark_mode_desc}</p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {THEME_OPTIONS.map((opt) => (
-                <button
-                  key={opt.mode}
-                  type="button"
-                  onClick={() => setThemeMode(opt.mode)}
-                  className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-                    themeMode === opt.mode
-                      ? "havana-btn-primary"
-                      : "border border-[var(--havana-text-muted)]/30"
-                  }`}
-                >
-                  {isArabic ? opt.labelAr : opt.labelEn}
-                </button>
-              ))}
+            <SectionHeader title={t.profile_section_address} />
+            <div className="havana-card overflow-hidden">
+              {editingField === "DELIVERY_ADDRESS" ? (
+                <FieldEditor
+                  label={t.profile_address}
+                  t={t}
+                  fields={[
+                    {
+                      key: "address",
+                      label: t.profile_address_hint,
+                      value: profile.deliveryAddressFull ?? "",
+                      multiline: true,
+                    },
+                  ]}
+                  onSave={saveProfile}
+                  onCancel={() => setEditingField(null)}
+                />
+              ) : (
+                <ProfileInfoRow
+                  label={t.profile_address}
+                  value={profile.deliveryAddressFull ?? t.profile_address_not_set}
+                  editable
+                  onEdit={() => setEditingField("DELIVERY_ADDRESS")}
+                  leadingIcon={<MapPin className="mt-1 h-[18px] w-[18px] havana-primary" />}
+                />
+              )}
             </div>
           </div>
-          <hr className="havana-divider mx-3" />
-          <label className="flex cursor-pointer items-center justify-between gap-3 px-3 py-3">
-            <div>
-              <p className="text-sm font-medium">{profileLanguageLabel(t, isArabic)}</p>
-              <p className="text-xs text-[var(--havana-text-muted)]">
-                {profileLanguageSubtitle(t, isArabic)}
-              </p>
+
+          <div>
+            <SectionHeader title={t.profile_section_preferences} />
+            <div className="havana-card overflow-hidden">
+              <div className="px-3 py-3">
+                <p className="text-sm font-medium">{t.profile_dark_mode}</p>
+                <p className="text-xs text-[var(--havana-text-muted)]">{t.profile_dark_mode_desc}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {THEME_OPTIONS.map((opt) => (
+                    <button
+                      key={opt.mode}
+                      type="button"
+                      onClick={() => setThemeMode(opt.mode)}
+                      className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
+                        themeMode === opt.mode
+                          ? "havana-btn-primary"
+                          : "border border-[var(--havana-text-muted)]/30"
+                      }`}
+                    >
+                      {isArabic ? opt.labelAr : opt.labelEn}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <hr className="havana-divider mx-3" />
+              <label className="flex cursor-pointer items-center justify-between gap-3 px-3 py-3">
+                <div>
+                  <p className="text-sm font-medium">{profileLanguageLabel(t, isArabic)}</p>
+                  <p className="text-xs text-[var(--havana-text-muted)]">
+                    {profileLanguageSubtitle(t, isArabic)}
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  className="h-5 w-9 cursor-pointer accent-[var(--havana-maroon)] dark:accent-[var(--havana-gold)]"
+                  checked={isArabic}
+                  onChange={(e) => toggleArabic(e.target.checked)}
+                  role="switch"
+                  aria-checked={isArabic}
+                />
+              </label>
             </div>
-            <input
-              type="checkbox"
-              className="h-5 w-9 cursor-pointer accent-[var(--havana-maroon)] dark:accent-[var(--havana-gold)]"
-              checked={isArabic}
-              onChange={(e) => toggleArabic(e.target.checked)}
-              role="switch"
-              aria-checked={isArabic}
-            />
-          </label>
+
+            <button
+              type="button"
+              className="mt-6 w-full rounded-xl border border-[var(--havana-error)]/50 py-3 text-[15px] font-semibold text-[var(--havana-error)]"
+              onClick={onLogoutClick}
+            >
+              {t.profile_logout}
+            </button>
+          </div>
         </div>
-
-        <button
-          type="button"
-          className="mt-6 w-full rounded-xl border border-[var(--havana-error)]/50 py-3 text-[15px] font-semibold text-[var(--havana-error)]"
-          onClick={onLogoutClick}
-        >
-          {t.profile_logout}
-        </button>
       </div>
-
-      <BottomNav
-        active="profile"
-        onHome={onHomeClick}
-        onCart={onCartClick}
-        onOrders={onOrdersClick}
-        onProfile={() => {}}
-      />
     </AppShell>
   );
 }

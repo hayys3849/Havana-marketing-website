@@ -1,11 +1,7 @@
 "use client";
 
 import { useState } from "react";
-<<<<<<< HEAD
-import { useRouter } from "next/navigation";
-=======
 import { useProductEntryStore } from "@/store/product-entry-store";
->>>>>>> 6bfdf93 (android web application created (not responsive yet))
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { cn, formatPrice } from "@/lib/utils";
@@ -20,19 +16,11 @@ interface ProductCardProps { product: Product; index?: number; className?: strin
 
 export function ProductCard({ product, index = 0, className }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
-<<<<<<< HEAD
-  const router = useRouter();
-  const locale = useLanguageStore((s) => s.locale);
-  const t = getDictionary(locale);
-  const hasDiscount = product.salePrice && product.salePrice < product.price;
-  const handleProductAction = () => { router.push("/download"); };
-=======
   const openModal = useProductEntryStore((s) => s.openModal);
   const locale = useLanguageStore((s) => s.locale);
   const t = getDictionary(locale);
   const hasDiscount = product.salePrice && product.salePrice < product.price;
   const handleProductAction = () => { openModal(); };
->>>>>>> 6bfdf93 (android web application created (not responsive yet))
 
   return (
     <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: index * 0.1 }} className={cn("group relative cursor-pointer", className)} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} onClick={handleProductAction}>

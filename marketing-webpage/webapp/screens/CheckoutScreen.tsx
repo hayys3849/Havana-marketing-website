@@ -62,8 +62,8 @@ export function CheckoutScreen({ onBackClick, onPickOnMap, savedAddress }: Check
   return (
     <AppShell className="pb-8">
       <ScreenHeader title={t.checkout_title} onBack={onBackClick} backLabel />
-      <div className="space-y-4 px-4 md:max-w-2xl md:px-6 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0">
-        <section className="havana-card p-4">
+      <div className="space-y-4 px-4 md:px-6 lg:grid lg:grid-cols-[1fr_320px] lg:gap-6 lg:space-y-0">
+        <section className="havana-card p-4 lg:order-2 lg:sticky lg:top-4 lg:self-start">
           <h2 className="font-semibold">{t.checkout_order_summary}</h2>
           <ul className="mt-2 space-y-1 text-sm">
             {cart.map((c) => (
@@ -80,7 +80,7 @@ export function CheckoutScreen({ onBackClick, onPickOnMap, savedAddress }: Check
           </div>
         </section>
 
-        <div className="space-y-4">
+        <div className="space-y-4 lg:order-1">
           <section className="havana-card p-4">
             <h2 className="font-semibold">{t.checkout_delivery_address}</h2>
             {savedAddress?.mapLabel ? (

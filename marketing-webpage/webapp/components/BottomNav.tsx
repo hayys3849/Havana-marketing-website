@@ -22,7 +22,7 @@ export function BottomNav({ active, onHome, onCart, onOrders, onProfile }: Botto
   ];
 
   return (
-    <nav className="havana-nav fixed bottom-0 left-0 right-0 z-40 mx-auto flex w-full max-w-[960px] justify-around px-2 py-2 safe-area-pb">
+    <nav className="havana-nav fixed bottom-0 left-0 right-0 z-40 mx-auto flex w-full max-w-[960px] justify-around px-2 py-2 safe-area-pb lg:hidden">
       {items.map(({ key, label, icon: Icon, onClick }) => {
         const selected = active === key;
         return (

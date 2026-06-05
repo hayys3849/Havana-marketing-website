@@ -2,7 +2,6 @@
 
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { AppShell } from "../components/AppShell";
-import { BottomNav } from "../components/BottomNav";
 import { EmptyState } from "../components/EmptyState";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { useAppStrings } from "../hooks/use-app-strings";
@@ -15,6 +14,36 @@ interface CartScreenProps {
   onHomeClick: () => void;
   onOrdersClick: () => void;
   onProfileClick: () => void;
+}
+
+function CartSummaryPanel({
+  itemCount,
+  subtotal,
+  onCheckoutClick,
+  t,
+  className,
+}: {
+  itemCount: number;
+  subtotal: number;
+  onCheckoutClick: () => void;
+  t: ReturnType<typeof useAppStrings>;
+  className?: string;
+}) {
+  return (
+    <div className={className}>
+      <div className="flex justify-between text-sm">
+        <span>{t.cart_total_items.replace("%d", String(itemCount))}</span>
+        <span className="text-xl font-bold havana-primary">{formatKd(subtotal)}</span>
+      </div>
+      <button
+        type="button"
+        className="havana-btn-primary mt-3 w-full rounded-xl py-3 text-base font-semibold"
+        onClick={onCheckoutClick}
+      >
+        {t.cart_proceed_checkout}
+      </button>
+    </div>
+  );
 }
 
 export function CartScreen({
@@ -36,7 +65,17 @@ export function CartScreen({
   const isEmpty = cart.length === 0;
 
   return (
-    <AppShell withBottomNav className={isEmpty ? "pb-20" : "pb-36"}>
+    <AppShell
+      withBottomNav
+      className={isEmpty ? "pb-20 lg:pb-0" : "pb-36 lg:pb-0"}
+      nav={{
+        active: "cart",
+        onHome: onHomeClick,
+        onCart: () => {},
+        onOrders: onOrdersClick,
+        onProfile: onProfileClick,
+      }}
+    >
       <ScreenHeader title={t.cart_title} onBack={onBackClick} />
 
       {isEmpty ? (
@@ -48,8 +87,8 @@ export function CartScreen({
           onAction={onHomeClick}
         />
       ) : (
-        <>
-          <ul className="flex-1 space-y-3 px-4 md:px-6 lg:grid lg:grid-cols-2 lg:gap-4 lg:space-y-0">
+        <div className="lg:flex lg:flex-1 lg:gap-6 lg:px-6 lg:pb-6">
+          <ul className="flex-1 space-y-3 px-4 md:px-6 lg:space-y-3 lg:px-0">
             {cart.map((item) => (
               <li key={item.productId} className="havana-card flex gap-3 p-3 lg:p-4">
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-black/5 text-2xl dark:bg-white/5">
@@ -91,29 +130,27 @@ export function CartScreen({
               </li>
             ))}
           </ul>
-          <div className="havana-checkout-bar fixed bottom-16 left-0 right-0 z-20 mx-auto max-w-[960px] border-t px-4 py-4 md:px-6">
-            <div className="flex justify-between text-sm">
-              <span>{t.cart_total_items.replace("%d", String(itemCount))}</span>
-              <span className="text-xl font-bold havana-primary">{formatKd(subtotal)}</span>
-            </div>
-            <button
-              type="button"
-              className="havana-btn-primary mt-3 w-full rounded-xl py-3 text-base font-semibold md:max-w-md md:mx-auto md:block"
-              onClick={onCheckoutClick}
-            >
-              {t.cart_proceed_checkout}
-            </button>
-          </div>
-        </>
-      )}
 
-      <BottomNav
-        active="cart"
-        onHome={onHomeClick}
-        onCart={() => {}}
-        onOrders={onOrdersClick}
-        onProfile={onProfileClick}
-      />
+          <aside className="havana-card mx-4 hidden p-4 lg:sticky lg:top-4 lg:mx-0 lg:block lg:w-80 lg:shrink-0 lg:self-start">
+            <h2 className="mb-3 font-semibold">{t.checkout_order_summary}</h2>
+            <CartSummaryPanel
+              itemCount={itemCount}
+              subtotal={subtotal}
+              onCheckoutClick={onCheckoutClick}
+              t={t}
+            />
+          </aside>
+
+          <div className="havana-checkout-bar fixed bottom-16 left-0 right-0 z-20 mx-auto max-w-[960px] border-t px-4 py-4 md:px-6 lg:hidden">
+            <CartSummaryPanel
+              itemCount={itemCount}
+              subtotal={subtotal}
+              onCheckoutClick={onCheckoutClick}
+              t={t}
+            />
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }

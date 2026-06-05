@@ -36,14 +36,34 @@
 }
 
 @media (min-width: 768px) {
-  .havana-shell {
+  .havana-shell:not(.havana-shell-main) {
     max-width: 640px;
   }
 }
 
 @media (min-width: 1024px) {
-  .havana-shell {
+  .havana-shell:not(.havana-shell-main) {
     max-width: 960px;
+  }
+
+  .havana-shell-root {
+    min-height: 100dvh;
+  }
+
+  .havana-sidebar {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: 50;
+    width: var(--havana-sidebar-width, 220px);
+    border-inline-end: 1px solid var(--havana-divider);
+    background: var(--havana-nav-bg);
+  }
+
+  .havana-shell-main {
+    margin-inline-start: var(--havana-sidebar-width, 220px);
+    max-width: none;
+    width: calc(100% - var(--havana-sidebar-width, 220px));
   }
 }
 

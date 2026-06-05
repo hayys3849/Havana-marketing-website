@@ -1,12 +1,12 @@
 "use client";
 
 import { AppShell } from "../components/AppShell";
-import { BottomNav } from "../components/BottomNav";
 import { EmptyState } from "../components/EmptyState";
 import { ScreenHeader } from "../components/ScreenHeader";
 import { useAppStrings } from "../hooks/use-app-strings";
 import { formatKd } from "../mock/catalog";
 import { useHavanaStore } from "../state/havana-store";
+import type { Order } from "../types";
 
 interface OrdersScreenProps {
   onOrderClick: (orderId: string) => void;
@@ -25,6 +25,11 @@ const FILTERS = [
   { key: "cancelled", labelKey: "orders_filter_cancelled" as const },
 ];
 
+function orderStatusLabel(order: Order, t: ReturnType<typeof useAppStrings>) {
+  const key = `status_${order.status}` as keyof ReturnType<typeof useAppStrings>;
+  return t[key] ?? order.status;
+}
+
 export function OrdersScreen({
   onOrderClick,
   onHomeClick,
@@ -40,7 +45,17 @@ export function OrdersScreen({
     ordersFilter === "all" ? orders : orders.filter((o) => o.status === ordersFilter);
 
   return (
-    <AppShell withBottomNav className="pb-24">
+    <AppShell
+      withBottomNav
+      className="pb-24 lg:pb-0"
+      nav={{
+        active: "orders",
+        onHome: onHomeClick,
+        onCart: onCartClick,
+        onOrders: () => {},
+        onProfile: onProfileClick,
+      }}
+    >
       <ScreenHeader title={t.orders_title} />
 
       <div className="flex gap-2 overflow-x-auto px-4 py-2 md:px-6">
@@ -66,7 +81,7 @@ export function OrdersScreen({
           subtitle={t.orders_appear_here}
         />
       ) : (
-        <ul className="flex-1 space-y-3 px-4 pb-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0 lg:grid-cols-3 md:px-6">
+        <ul className="flex-1 space-y-3 px-4 pb-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0 md:px-6 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.map((order) => (
             <li key={order.id}>
               <button
@@ -76,7 +91,7 @@ export function OrdersScreen({
               >
                 <div className="flex justify-between gap-2">
                   <span className="font-semibold">{order.orderNumber}</span>
-                  <span className="text-xs text-[var(--havana-text-muted)]">{order.status}</span>
+                  <span className="text-xs text-[var(--havana-text-muted)]">{orderStatusLabel(order, t)}</span>
                 </div>
                 <p className="mt-1 text-sm text-[var(--havana-text-muted)]">
                   {order.items.length} items · {new Date(order.placedAt).toLocaleDateString()}
@@ -87,14 +102,6 @@ export function OrdersScreen({
           ))}
         </ul>
       )}
-
-      <BottomNav
-        active="orders"
-        onHome={onHomeClick}
-        onCart={onCartClick}
-        onOrders={() => {}}
-        onProfile={onProfileClick}
-      />
     </AppShell>
   );
 }

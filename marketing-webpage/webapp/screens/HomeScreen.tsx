@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 import { Search, ShoppingCart } from "lucide-react";
 import { AppShell } from "../components/AppShell";
-import { BottomNav } from "../components/BottomNav";
 import { useAppStrings } from "../hooks/use-app-strings";
 import { PRODUCTS, CATEGORIES, categoryEmoji, formatKd, displayPrice } from "../mock/catalog";
 import { useHavanaStore } from "../state/havana-store";
@@ -85,7 +84,16 @@ export function HomeScreen({
   const showSections = !searchQuery && selectedCategory === "All";
 
   return (
-    <AppShell withBottomNav>
+    <AppShell
+      withBottomNav
+      nav={{
+        active: "home",
+        onHome: () => {},
+        onCart: onCartClick,
+        onOrders: onOrdersClick,
+        onProfile: onProfileClick,
+      }}
+    >
       <header className="havana-topbar sticky top-0 z-30 px-4 py-3 md:px-6">
         <div className="flex items-start justify-between">
           <div>
@@ -215,14 +223,6 @@ export function HomeScreen({
           </div>
         )}
       </div>
-
-      <BottomNav
-        active="home"
-        onHome={() => {}}
-        onCart={onCartClick}
-        onOrders={onOrdersClick}
-        onProfile={onProfileClick}
-      />
     </AppShell>
   );
 }
